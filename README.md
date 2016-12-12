@@ -26,6 +26,16 @@ Work in progress..
 3. Hosts without URL_*  inventory fields stay clean:
 ![image](https://cloud.githubusercontent.com/assets/14870891/21094290/5dd4f8d8-c067-11e6-8015-9263551803d5.png)  
 
+## Install  
+Change current folder to root of zabbix frontend:
+Then run:  
+```
+[vagrant@centos zabbix]$ sudo patch -p1  -i zabbix-hostmenu.diff 
+patching file js/init.js
+patching file js/menupopup.js
+```
+You are done.  
+
 
 ## Known issues  
 
