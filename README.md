@@ -39,7 +39,7 @@ You are done.
 
 ## TODO  
 1. Make sure that {HOST.IP} and {HOST.CONN} always return main interface   
-2. Remove possible race condition for RPC object  
+2. Remove possible race condition for RPC object  (find a way to clone RPC object)
 3. Extend functionality to Map context menu  
 
 
