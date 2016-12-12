@@ -1,19 +1,15 @@
 # zabbix-hostmenu  
 
 Frontend JS patch that allows to add additional External or internal URLs to Host Menu everywhere in the Zabbix Frontend  
-Work in progress..  
+
+
 
 ## Features  
 
 1. Use host's `URL_A`, `URL_B`, `URL_C` Inventory fields    
 2. Macros {HOST.ID}, {HOST.HOST}, {HOST.NAME}, {HOST.CONN} and {INTENVORY.*} can be used in URLs  
 3. Add a name to URL link like so: `Google|http://google.com`  
-
-
-## TODO  
-1. Make sure that {HOST.IP} and {HOST.CONN} always return main interface   
-2. Remove possible race condition for RPC object  
-3. Extend functionality to Map context menu  
+4. Tested in Zabbix 2.4 and 3.2  
 
 
 ## Example  
@@ -38,6 +34,13 @@ You are done.
 
 
 ## Known issues  
+1. This patch adds extra JSON API Call, so menu is a bit slower than before.  
+
+
+## TODO  
+1. Make sure that {HOST.IP} and {HOST.CONN} always return main interface   
+2. Remove possible race condition for RPC object  
+3. Extend functionality to Map context menu  
 
 
 ## More info and help  
