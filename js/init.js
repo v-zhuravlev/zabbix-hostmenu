@@ -74,7 +74,39 @@ jQuery(function($) {
 				break;
 
 			case 'host':
-				data = getMenuPopupHost(data);
+                //zabbix-hostmenu patch START
+                var rpcRequest = {
+                    'method': 'host.get',
+                    'params': {
+                        'filter': {'hostid': data.hostid},
+                        'output': ['hostid','host','name'],
+                        'selectInventory': 'extend',
+                        "selectInterfaces": ["ip","main"]
+                    },
+                    'onSuccess': function (response) {
+                        
+                        data.inventory = response[0].inventory;
+                        data.hostname = response[0].hostname;
+                        data.host = response[0].host;
+                        data.ip = response[0].interfaces[0].ip;
+
+                        data = getMenuPopupHost(data);
+
+                        obj.menuPopup(data, event);
+                    }
+                };
+                                
+                var api = Object.create(RPC);
+                api = RPC;
+                api.rpcurl("api_jsonrpc.php");
+                
+                new api.Call(rpcRequest);
+                RPC.rpcurl("jsrpc.php?output=json-rpc");//RACE CONDITION?
+
+                
+                
+                return false;
+                //zabbix-hostmenu patch END
 				break;
 
 			case 'map':

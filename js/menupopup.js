@@ -297,8 +297,146 @@ function getMenuPopupHost(options) {
 			items: gotos
 		};
 	}
+        //zabbix-hostmenu patch START
+        if (typeof options.inventory !== 'undefined') {
+            var urls = [];
 
-	return sections;
+            var macros = {
+                'HOST.ID':options.hostid,
+                'HOST.HOST':options.host,
+                'HOST.NAME':options.hostname,
+                'HOST.IP':options.ip,
+                'HOST.CONN':options.ip,
+                'INVENTORY.ASSET.TAG':options.inventory['asset_tag'],
+                'INVENTORY.ALIAS':options.inventory['alias'],
+                'INVENTORY.CHASSIS':options.inventory['chassis'],
+                'INVENTORY.CONTACT':options.inventory['contact'],
+                'INVENTORY.CONTRACT.NUMBER':options.inventory['contract_number'],
+                'INVENTORY.DATE.HW.DECOMM':options.inventory['date_hw_decomm'],
+                'INVENTORY.DATE.HW.EXPIRY':options.inventory['date_hw_expiry'],
+                'INVENTORY.DATE.HW.INSTALL':options.inventory['date_hw_install'],
+                'INVENTORY.DATE.HW.PURCHASE':options.inventory['date_hw_purchase'],
+                'INVENTORY.DEPLOYMENT.STATUS':options.inventory['deployment_status'],
+                'INVENTORY.HARDWARE':options.inventory['hardware'],
+                'INVENTORY.HARDWARE.FULL':options.inventory['hardware_full'],
+                'INVENTORY.HOST.NETMASK':options.inventory['host_netmask'],
+                'INVENTORY.HOST.NETWORKS':options.inventory['host_networks'],
+                'INVENTORY.HOST.ROUTER':options.inventory['host_router'],
+                'INVENTORY.HW.ARCH':options.inventory['hw_arch'],
+                'INVENTORY.INSTALLER.NAME':options.inventory['installer_name'],
+                'INVENTORY.LOCATION':options.inventory['location'],
+                'INVENTORY.LOCATION.LAT':options.inventory['location_lat'],
+                'INVENTORY.LOCATION.LON':options.inventory['location_lon'],
+                'INVENTORY.MACADDRESS.A':options.inventory['macaddress_a'],
+                'INVENTORY.MACADDRESS.B':options.inventory['macaddress_b'],
+                'INVENTORY.MODEL':options.inventory['model'],
+                'INVENTORY.NAME':options.inventory['name'],
+                'INVENTORY.NOTES':options.inventory['notes'],
+                'INVENTORY.OOB.IP':options.inventory['oob_ip'],
+                'INVENTORY.OOB.NETMASK':options.inventory['oob_netmask'],
+                'INVENTORY.OOB.ROUTER':options.inventory['oob_router'],
+                'INVENTORY.OS':options.inventory['os'],
+                'INVENTORY.OS.FULL':options.inventory['os_full'],
+                'INVENTORY.OS.SHORT':options.inventory['os_short'],
+                'INVENTORY.POC.1.CELL':options.inventory['poc_1_cell'],
+                'INVENTORY.POC.1.EMAIL':options.inventory['poc_1_email'],
+                'INVENTORY.POC.1.NAME':options.inventory['poc_1_name'],
+                'INVENTORY.POC.1.NOTES':options.inventory['poc_1_notes'],
+                'INVENTORY.POC.1.PHONE.A':options.inventory['poc_1_phone_a'],
+                'INVENTORY.POC.1.PHONE.B':options.inventory['poc_1_phone_b'],
+                'INVENTORY.POC.1.SCREEN':options.inventory['poc_1_screen'],
+                'INVENTORY.POC.2.CELL':options.inventory['poc_2_cell'],
+                'INVENTORY.POC.2.EMAIL':options.inventory['poc_2_email'],
+                'INVENTORY.POC.2.NAME':options.inventory['poc_2_name'],
+                'INVENTORY.POC.2.NOTES':options.inventory['poc_2_notes'],
+                'INVENTORY.POC.2.PHONE.A':options.inventory['poc_2_phone_a'],
+                'INVENTORY.POC.2.PHONE.B':options.inventory['poc_2_phone_b'],
+                'INVENTORY.POC.2.SCREEN':options.inventory['poc_2_screen'],
+                'INVENTORY.SERIALNO.A':options.inventory['serialno_a'],
+                'INVENTORY.SERIALNO.B':options.inventory['serialno_b'],
+                'INVENTORY.SITE.ADDRESS.A':options.inventory['site_address_a'],
+                'INVENTORY.SITE.ADDRESS.B':options.inventory['site_address_b'],
+                'INVENTORY.SITE.ADDRESS.C':options.inventory['site_address_c'],
+                'INVENTORY.SITE.CITY':options.inventory['site_city'],
+                'INVENTORY.SITE.COUNTRY':options.inventory['site_country'],
+                'INVENTORY.SITE.NOTES':options.inventory['site_notes'],
+                'INVENTORY.SITE.RACK':options.inventory['site_rack'],
+                'INVENTORY.SITE.STATE':options.inventory['site_state'],
+                'INVENTORY.SITE.ZIP':options.inventory['site_zip'],
+                'INVENTORY.SOFTWARE':options.inventory['software'],
+                'INVENTORY.SOFTWARE.APP.A':options.inventory['software_app_a'],
+                'INVENTORY.SOFTWARE.APP.B':options.inventory['software_app_b'],
+                'INVENTORY.SOFTWARE.APP.C':options.inventory['software_app_c'],
+                'INVENTORY.SOFTWARE.APP.D':options.inventory['software_app_d'],
+                'INVENTORY.SOFTWARE.APP.E':options.inventory['software_app_e'],
+                'INVENTORY.SOFTWARE.FULL':options.inventory['software_full'],
+                'INVENTORY.TAG':options.inventory['tag'],
+                'INVENTORY.TYPE':options.inventory['type'],
+                'INVENTORY.TYPE.FULL':options.inventory['type_full'],
+                //'INVENTORY.URL.A':options.inventory['url_a'],
+                //'INVENTORY.URL.B':options.inventory['url_b'],
+                //'INVENTORY.URL.C':options.inventory['url_c'],
+                'INVENTORY.VENDOR':options.inventory['vendor'],
+
+                
+            };
+            
+            function parseURL (url) {
+                
+                if (url.indexOf("{")>=0){
+
+                    url = url.replace(/{(.+?)}/g, function (match, p1){
+                      return macros[p1.toUpperCase()];
+                    });
+
+                }
+                var temp_arr ;
+                if (url.indexOf("|")>0) {
+                        temp_arr = url.split("|",2);
+                        
+                    return  {
+                        label: t(temp_arr[0]),
+                        url: t(temp_arr[1])
+                    };
+                }
+                else {
+                    return  {
+                        label: t(url),
+                        url: url
+                    };
+                }
+            }
+            
+            if (typeof options.inventory.url_a !== 'undefined' && options.inventory.url_a !== '') {
+                
+                url_a = parseURL(options.inventory.url_a);
+                urls[urls.length]=url_a;
+            }
+            
+            if (typeof options.inventory.url_b !== 'undefined' && options.inventory.url_b !== '') {
+                url_b = parseURL(options.inventory.url_b);
+                urls[urls.length]=url_b;
+            }
+            
+            
+            if (typeof options.inventory.url_c !== 'undefined' && options.inventory.url_c !== '') {
+                url_c = parseURL(options.inventory.url_c);
+                urls[urls.length]=url_c;
+            }
+            if (urls.length>0) {
+                sections[sections.length] = {
+                    label: t('URL'),
+                    items: urls
+                };
+            }
+
+            
+    }
+
+            //zabbix-hostmenu patch END
+    return sections;
+
+
 }
 
 /**
