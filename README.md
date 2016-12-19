@@ -9,7 +9,7 @@ Frontend JS patch that allows to add additional External or internal URLs to Hos
 1. Use host's `URL_A`, `URL_B`, `URL_C` Inventory fields    
 2. Macros {HOST.ID}, {HOST.HOST}, {HOST.NAME}, {HOST.CONN} and {INTENVORY.*} can be used in URLs  
 3. Add a name to URL link like so: `Google|http://google.com`  
-4. Tested in Zabbix 2.4 and 3.2  
+4. Tested in Zabbix 2.4, 3.0 and 3.2  
 
 
 ## Example  
