@@ -1,5 +1,5 @@
 diff --git a/js/init.js b/js/init.js
-index 2a71589..65accb5 100644
+index 2a71589..7df0ab6 100644
 --- a/js/init.js
 +++ b/js/init.js
 @@ -74,7 +74,39 @@ jQuery(function($) {
@@ -43,8 +43,44 @@ index 2a71589..65accb5 100644
  				break;
  
  			case 'map':
+@@ -86,7 +118,34 @@ jQuery(function($) {
+ 				break;
+ 
+ 			case 'trigger':
+-				data = getMenuPopupTrigger(data);
++				//zabbix-hostmenu patch START PART #2 (graphs in triggers menu auto add)
++                var itemids = data.items.map(function(item) {
++                        return item.params.itemid;
++                    });                
++
++                var rpcRequest = {
++                    'method': 'graph.get',
++                    'params': {
++                        'output': ['graphid','name'],
++                        'itemids': itemids,
++                    },
++                    'onSuccess': function (response) {
++
++                        data.graphs = response;
++                        data = getMenuPopupTrigger(data);
++                        obj.menuPopup(data, event);
++                    }
++                };
++                                
++                var api = Object.create(RPC);
++                api = RPC;
++                api.rpcurl("api_jsonrpc.php");
++                
++                new api.Call(rpcRequest);
++                RPC.rpcurl("jsrpc.php?output=json-rpc");//RACE CONDITION?
++
++                return false;
++                //zabbix-hostmenu patch END PART #2
+ 				break;
+ 
+ 			case 'triggerLog':
 diff --git a/js/menupopup.js b/js/menupopup.js
-index 91bf07e..c679780 100644
+index 91bf07e..45a1c60 100644
 --- a/js/menupopup.js
 +++ b/js/menupopup.js
 @@ -297,8 +297,146 @@ function getMenuPopupHost(options) {
@@ -195,3 +231,33 @@ index 91bf07e..c679780 100644
  }
  
  /**
+@@ -675,7 +813,28 @@ function getMenuPopupTrigger(options) {
+ 			items: items
+ 		};
+ 	}
++    //zabbix-hostmenu patch START PART #2 (graphs in triggers menu auto add)
++    if (typeof options.graphs !== 'undefined' && objectSize(options.graphs) > 0) {
++		var graphs = [];
++
++		jQuery.each(options.graphs, function(i, graph) {
++			var url = new Curl('charts.php');
++			
++            url.setArgument('graphid', graph.graphid);
++
++			graphs[graphs.length] = {
++				label: graph.name,
++				url: url.getUrl()
++			};
++		});
+ 
++		sections[sections.length] = {
++			label: t('Graphs'),
++			items: graphs
++		};
++	}
++    //zabbix-hostmenu patch END PART #2
++    
+ 	return sections;
+ }
+ 
+
