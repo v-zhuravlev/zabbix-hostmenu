@@ -118,7 +118,38 @@ jQuery(function($) {
 				break;
 
 			case 'trigger':
-				data = getMenuPopupTrigger(data);
+				//zabbix-triggermenu patch START
+                var itemids = data.items.map(function(item) {
+                        return item.params.itemid;
+                    });                
+                console.log(itemids);
+                var rpcRequest = {
+                    'method': 'graph.get',
+                    'params': {
+                        'output': ['graphid','name'],
+                        'itemids': itemids,
+                    },
+                    'onSuccess': function (response) {
+                        console.log(response);
+                        data.graphs = response;
+                        
+                        data = getMenuPopupTrigger(data);
+
+                        obj.menuPopup(data, event);
+                    }
+                };
+                                
+                var api = Object.create(RPC);
+                api = RPC;
+                api.rpcurl("api_jsonrpc.php");
+                
+                new api.Call(rpcRequest);
+                RPC.rpcurl("jsrpc.php?output=json-rpc");//RACE CONDITION?
+
+                
+                
+                return false;
+                //zabbix-triggermenu patch END
 				break;
 
 			case 'triggerLog':

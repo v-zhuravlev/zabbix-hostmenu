@@ -794,6 +794,7 @@ function getMenuPopupTrigger(options) {
 	};
 
 	// items
+    console.log(options.items);
 	if (typeof options.items !== 'undefined' && objectSize(options.items) > 0) {
 		var items = [];
 
@@ -813,7 +814,29 @@ function getMenuPopupTrigger(options) {
 			items: items
 		};
 	}
+    
+    if (typeof options.graphs !== 'undefined' && objectSize(options.graphs) > 0) {
+		var graphs = [];
+        console.log("options.graphs");
+        console.log(options.graphs);
+		jQuery.each(options.graphs, function(i, graph) {
+			var url = new Curl('charts.php');
+			
+            url.setArgument('graphid', graph.graphid);
 
+			graphs[graphs.length] = {
+				label: graph.name,
+				url: url.getUrl()
+			};
+		});
+
+		sections[sections.length] = {
+			label: t('Graphs'),
+			items: graphs
+		};
+	}
+    
+    console.log(sections);
 	return sections;
 }
 
