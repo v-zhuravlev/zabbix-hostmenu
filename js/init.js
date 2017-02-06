@@ -118,11 +118,11 @@ jQuery(function($) {
 				break;
 
 			case 'trigger':
-				//zabbix-triggermenu patch START
+				//zabbix-hostmenu patch START PART #2 (graphs in triggers menu auto add)
                 var itemids = data.items.map(function(item) {
                         return item.params.itemid;
                     });                
-                console.log(itemids);
+
                 var rpcRequest = {
                     'method': 'graph.get',
                     'params': {
@@ -130,11 +130,9 @@ jQuery(function($) {
                         'itemids': itemids,
                     },
                     'onSuccess': function (response) {
-                        console.log(response);
-                        data.graphs = response;
-                        
-                        data = getMenuPopupTrigger(data);
 
+                        data.graphs = response;
+                        data = getMenuPopupTrigger(data);
                         obj.menuPopup(data, event);
                     }
                 };
@@ -146,10 +144,8 @@ jQuery(function($) {
                 new api.Call(rpcRequest);
                 RPC.rpcurl("jsrpc.php?output=json-rpc");//RACE CONDITION?
 
-                
-                
                 return false;
-                //zabbix-triggermenu patch END
+                //zabbix-hostmenu patch END PART #2
 				break;
 
 			case 'triggerLog':

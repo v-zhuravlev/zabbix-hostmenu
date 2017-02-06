@@ -794,7 +794,6 @@ function getMenuPopupTrigger(options) {
 	};
 
 	// items
-    console.log(options.items);
 	if (typeof options.items !== 'undefined' && objectSize(options.items) > 0) {
 		var items = [];
 
@@ -814,11 +813,10 @@ function getMenuPopupTrigger(options) {
 			items: items
 		};
 	}
-    
+    //zabbix-hostmenu patch START PART #2 (graphs in triggers menu auto add)
     if (typeof options.graphs !== 'undefined' && objectSize(options.graphs) > 0) {
 		var graphs = [];
-        console.log("options.graphs");
-        console.log(options.graphs);
+
 		jQuery.each(options.graphs, function(i, graph) {
 			var url = new Curl('charts.php');
 			
@@ -835,8 +833,8 @@ function getMenuPopupTrigger(options) {
 			items: graphs
 		};
 	}
+    //zabbix-hostmenu patch END PART #2
     
-    console.log(sections);
 	return sections;
 }
 
