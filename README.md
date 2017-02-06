@@ -6,7 +6,8 @@ This is the frontend JS patch that allows to:
 - (NEW) automatically add direct links to related and in-context graphs in trigger popup menu if any
 
 
-## Trigger menu Features  
+## Trigger menu Features (links to graphs)  
+By default in Zabbix only links to simple graphs are available. This patch adds links to more interesting looking graphs as well if any.
 
 1. Patch will automatically add links to related graphs in trigger popup menu if any (Problems, Events and Triggers zabbix sections)  
 2. Tested in Zabbix 2.4, 3.0 and 3.2  
@@ -17,6 +18,8 @@ This is the frontend JS patch that allows to:
 ![image](https://cloud.githubusercontent.com/assets/14870891/22647372/261e7062-ec82-11e6-8ea7-7327dae6ee31.png)  
 And one more sample:  
 ![image](https://cloud.githubusercontent.com/assets/14870891/22647411/599f9538-ec82-11e6-9d80-5e7c53a89090.png)
+and you are here:  
+![image](https://cloud.githubusercontent.com/assets/14870891/22647761/61c7a10e-ec84-11e6-8225-0e83180400df.png)
 
 
 ## Host menu Features  
