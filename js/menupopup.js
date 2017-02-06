@@ -813,7 +813,28 @@ function getMenuPopupTrigger(options) {
 			items: items
 		};
 	}
+    //zabbix-hostmenu patch START PART #2 (graphs in triggers menu auto add)
+    if (typeof options.graphs !== 'undefined' && objectSize(options.graphs) > 0) {
+		var graphs = [];
 
+		jQuery.each(options.graphs, function(i, graph) {
+			var url = new Curl('charts.php');
+			
+            url.setArgument('graphid', graph.graphid);
+
+			graphs[graphs.length] = {
+				label: graph.name,
+				url: url.getUrl()
+			};
+		});
+
+		sections[sections.length] = {
+			label: t('Graphs'),
+			items: graphs
+		};
+	}
+    //zabbix-hostmenu patch END PART #2
+    
 	return sections;
 }
 
